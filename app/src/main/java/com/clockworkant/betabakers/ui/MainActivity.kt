@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity(), CakeListView {
         CakeAdapter(callback = this::onCakeClicked)
 
     private lateinit var cakeListPresenter: CakeListPresenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cake_list)
@@ -34,6 +36,11 @@ class MainActivity : AppCompatActivity(), CakeListView {
         cakeListPresenter.onAppLoaded()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        cakeListPresenter.onTerminated()
+    }
+
     private fun onCakeClicked(cake: Cake) {
         //TODO show in alert dialog
         Toast.makeText(this, cake.desc, Toast.LENGTH_SHORT).show()
@@ -41,6 +48,10 @@ class MainActivity : AppCompatActivity(), CakeListView {
 
     override fun showCakes(cakes: List<Cake>) {
         cakeAdapter.setCakes(cakes)
+    }
+
+    override fun showError(error: Throwable) {
+        Log.e("!!!", "error getting cakes", error)
     }
 }
 
@@ -63,6 +74,7 @@ class CakeAdapter(
     fun setCakes(newCakes: List<Cake>) {
         cakes.clear()
         cakes.addAll(newCakes)
+        notifyDataSetChanged()
     }
 
 }
