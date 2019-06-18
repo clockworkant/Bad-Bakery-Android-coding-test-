@@ -27,7 +27,7 @@ ext.koin_version = '2.0.1'
 dependencies {
 
     //Json Parsing
-    implementation 'com.beust:klaxon:5.0.1'
+    implementation 'com.google.code.gson:gson:2.8.5'
 
     //Testing libs
     implementation 'com.natpryce:hamkrest:1.7.0.0'
