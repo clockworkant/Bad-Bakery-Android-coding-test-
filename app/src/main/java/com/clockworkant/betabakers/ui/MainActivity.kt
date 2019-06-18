@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.clockworkant.betabakers.R
 import com.clockworkant.betabakers.data.Cake
 import kotlinx.android.synthetic.main.activity_cake_list.*
@@ -85,8 +86,18 @@ class ViewHolder(
 ) : RecyclerView.ViewHolder(view) {
     fun bind(cake: Cake) {
         view.cake_item_name.text = cake.title
+
+        bindCakeImage(cake)
+
         view.setOnClickListener {
             callback.invoke(cake)
         }
+    }
+
+    private fun bindCakeImage(cake: Cake) {
+        Glide.with(view)
+            .load(cake.image)
+            .centerCrop()
+            .into(view.cake_item_imageview)
     }
 }
