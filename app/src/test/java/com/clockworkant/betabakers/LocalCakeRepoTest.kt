@@ -1,17 +1,18 @@
 package com.clockworkant.betabakers
 
 import com.clockworkant.betabakers.data.CakeRepo
-import com.clockworkant.betabakers.data.CakesRepoFromJson
+import com.clockworkant.betabakers.data.CakeRepoImpl
+import com.clockworkant.betabakers.data.LocalDataSource
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.junit.Test
 import java.io.BufferedInputStream
 import java.io.FileInputStream
 
-class CakeRepoFromJsonTest {
+class LocalCakeRepoTest {
     val cakesPath = this.javaClass.getResource("/cakes.json").path
 
-    val cakesRepo = CakesRepoFromJson(BufferedInputStream(FileInputStream(cakesPath))) as CakeRepo
+    val cakesRepo = CakeRepoImpl(LocalDataSource(BufferedInputStream(FileInputStream(cakesPath)))) as CakeRepo
 
     @Test
     fun `assert number of cakes`(){

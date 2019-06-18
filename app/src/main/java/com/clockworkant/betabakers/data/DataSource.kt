@@ -3,10 +3,13 @@ package com.clockworkant.betabakers.data
 import com.beust.klaxon.Klaxon
 import java.io.InputStream
 
-class CakesRepoFromJson(cakeInputStream: InputStream) : CakeRepo {
+interface DataSource{
+    fun getCakes(): List<Cake>
+}
+
+class LocalDataSource(cakeInputStream: InputStream) : DataSource {
     private val cakes: List<Cake> = Klaxon().parseArray(cakeInputStream)!!
 
-    override fun getAll(): List<Cake>  = cakes
+    override fun getCakes() = cakes
 
-    override fun getUniques(): Set<Cake> = cakes.toHashSet()
 }

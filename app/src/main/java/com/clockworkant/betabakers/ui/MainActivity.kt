@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity(), CakeListView {
         Toast.makeText(this, cake.desc, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showCakes(cakes: Set<Cake>) {
+    override fun showCakes(cakes: List<Cake>) {
         cakeAdapter.setCakes(cakes)
     }
 }
@@ -60,7 +60,7 @@ class CakeAdapter(
         viewHolder.bind(cakes[position])
     }
 
-    fun setCakes(newCakes: Set<Cake>) {
+    fun setCakes(newCakes: List<Cake>) {
         cakes.clear()
         cakes.addAll(newCakes)
     }

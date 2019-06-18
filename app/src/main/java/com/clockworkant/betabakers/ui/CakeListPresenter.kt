@@ -9,11 +9,11 @@ class CakeListPresenter(
 ) {
     fun onAppLoaded() {
         val uniques = cakeRepo.getUniques()
-        //TODO ensure cakes are ordered
-        cakeListView.showCakes(uniques)
+        val cakes = uniques.sortedBy { it.title }
+        cakeListView.showCakes(cakes)
     }
 }
 
 interface CakeListView {
-    fun showCakes(cakes: Set<Cake>)
+    fun showCakes(cakes: List<Cake>)
 }
