@@ -12,6 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.http.GET
+import java.util.concurrent.TimeUnit
 
 
 interface DataSource {
@@ -23,6 +24,9 @@ class LocalDataSource(cakeInputStream: InputStream) : DataSource {
         Gson().fromJson(InputStreamReader(cakeInputStream), Array<Cake>::class.java).toList()
 
     override fun getCakes() = Single.just(cakes)
+        .delay(2, TimeUnit.SECONDS)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
 
 }
 

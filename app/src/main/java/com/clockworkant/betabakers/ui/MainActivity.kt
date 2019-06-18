@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.cake_item.view.*
 import org.koin.android.ext.android.get
 
 class MainActivity : AppCompatActivity(), CakeListView {
+
     private val cakeAdapter: CakeAdapter =
         CakeAdapter(callback = this::onCakeClicked)
 
@@ -32,6 +33,8 @@ class MainActivity : AppCompatActivity(), CakeListView {
             layoutManager = LinearLayoutManager(context)
             adapter = cakeAdapter
         }
+
+        cakes_list_refreshlayout.setOnRefreshListener { cakeListPresenter.onRefresh() }
 
         cakeListPresenter = CakeListPresenter(this, get())
         cakeListPresenter.onAppLoaded()
@@ -51,12 +54,17 @@ class MainActivity : AppCompatActivity(), CakeListView {
         cakeAdapter.setCakes(cakes)
     }
 
+    override fun showLoading(isLoading: Boolean) {
+        cakes_list_refreshlayout.isRefreshing = isLoading
+    }
+
     override fun showError(error: Throwable) {
+        //TODO error dialog with retry
         Log.e("!!!", "error getting cakes", error)
     }
 }
 
-class CakeAdapter(
+private class CakeAdapter(
     private val cakes: MutableList<Cake> = mutableListOf(),
     private val callback: (cake: Cake) -> Unit
 ) : RecyclerView.Adapter<ViewHolder>() {
@@ -80,7 +88,7 @@ class CakeAdapter(
 
 }
 
-class ViewHolder(
+private class ViewHolder(
     private val view: View,
     private val callback: (cake: Cake) -> Unit
 ) : RecyclerView.ViewHolder(view) {

@@ -12,13 +12,20 @@ class CakeListPresenter(
     private val compositeDisposable = CompositeDisposable()
 
     fun onAppLoaded() {
+        refreshCakes()
+    }
+
+    private fun refreshCakes() {
+        cakeListView.showLoading(true)
         compositeDisposable.add(
             cakeRepo.getUniques()
                 .subscribe({ list ->
+                    cakeListView.showLoading(false)
                     cakeListView.showCakes(
                         list.sortedBy { cake -> cake.title }
                     )
                 }, {
+                    cakeListView.showLoading(false)
                     cakeListView.showError(it)
                 })
         )
@@ -27,9 +34,14 @@ class CakeListPresenter(
     fun onTerminated() {
         compositeDisposable.clear()
     }
+
+    fun onRefresh() {
+        refreshCakes()
+    }
 }
 
 interface CakeListView {
     fun showCakes(cakes: List<Cake>)
     fun showError(error: Throwable)
+    fun showLoading(isLoading: Boolean)
 }
