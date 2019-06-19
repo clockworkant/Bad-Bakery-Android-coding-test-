@@ -4,8 +4,8 @@ import com.clockworkant.betabakers.data.Cake
 import com.clockworkant.betabakers.data.CakeRepo
 import com.clockworkant.betabakers.data.CakeRepoImpl
 import com.clockworkant.betabakers.data.LocalDataSource
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
+import io.reactivex.Single
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
@@ -18,8 +18,6 @@ class CakeListPresenterTest {
 
     private val cakeListView = mock<CakeListView>()
 
-    private val cakeListPresenter = CakeListPresenter(cakeListView, testCakeRepo())
-
     @Before
     fun setUp() {
         RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
@@ -29,6 +27,7 @@ class CakeListPresenterTest {
 
     @Test
     fun `on load when repo has duplicates show only distinct cakes`() {
+        val cakeListPresenter = CakeListPresenter(cakeListView, testCakeRepo())
 
         cakeListPresenter.onAppLoaded()
 
@@ -39,6 +38,20 @@ class CakeListPresenterTest {
             Cake(title="Lemon cheesecake", desc="A cheesecake made of lemon", image="https://s3-eu-west-1.amazonaws.com/s3.mediafileserver.co.uk/carnation/WebFiles/RecipeImages/lemoncheesecake_lg.jpg"),
             Cake(title="victoria sponge", desc="sponge with jam", image="https://upload.wikimedia.org/wikipedia/commons/0/05/111rfyh.jpg")
         ))
+    }
+
+    @Test
+    fun `on load when repo failes to return items show error`() {
+        val mockRepo = mock<CakeRepo> {
+            on { getUniques() } doReturn Single.error(Throwable())
+            //TODO throwing generic error. Future could throw typed errors like Data not found (404) or Server Offline to provide different error messages
+        }
+
+        val cakeListPresenter = CakeListPresenter(cakeListView, mockRepo)
+
+        cakeListPresenter.onAppLoaded()
+
+        verify(cakeListView).showError(any())
     }
 
     private fun testCakeRepo(): CakeRepo {
