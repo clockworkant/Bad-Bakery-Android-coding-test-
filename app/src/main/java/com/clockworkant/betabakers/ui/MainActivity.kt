@@ -1,7 +1,9 @@
 package com.clockworkant.betabakers.ui
 
+import android.content.DialogInterface
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -15,6 +17,8 @@ import com.clockworkant.betabakers.data.Cake
 import kotlinx.android.synthetic.main.activity_cake_list.*
 import kotlinx.android.synthetic.main.cake_item.view.*
 import org.koin.android.ext.android.get
+import android.support.v7.widget.DividerItemDecoration
+
 
 class MainActivity : AppCompatActivity(), CakeListView {
 
@@ -29,9 +33,16 @@ class MainActivity : AppCompatActivity(), CakeListView {
         setSupportActionBar(toolbar)
 
         cakes_list.apply {
+            val linearLayoutManager = LinearLayoutManager(context)
             setHasFixedSize(false)
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = linearLayoutManager
             adapter = cakeAdapter
+            addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    linearLayoutManager.orientation
+                )
+            )
         }
 
         cakes_list_refreshlayout.setOnRefreshListener { cakeListPresenter.onRefresh() }
@@ -46,8 +57,12 @@ class MainActivity : AppCompatActivity(), CakeListView {
     }
 
     private fun onCakeClicked(cake: Cake) {
-        //TODO show in alert dialog
-        Toast.makeText(this, cake.desc, Toast.LENGTH_SHORT).show()
+        AlertDialog.Builder(this)
+            .setTitle(cake.title)
+            .setMessage(cake.desc)
+            .setPositiveButton("Ok", null)
+            .create()
+            .show()
     }
 
     override fun showCakes(cakes: List<Cake>) {
@@ -59,8 +74,13 @@ class MainActivity : AppCompatActivity(), CakeListView {
     }
 
     override fun showError(error: Throwable) {
-        //TODO error dialog with retry
-        Log.e("!!!", "error getting cakes", error)
+        AlertDialog.Builder(this)
+            .setTitle("Error")
+            .setMessage("We're sorry but an error has occured, would you like to try and retrieve the cakes again?")
+            .setPositiveButton("Refresh") { dialog, which -> cakeListPresenter.onRefresh()}
+            .setNeutralButton("Back", null)
+            .create()
+            .show()
     }
 }
 
