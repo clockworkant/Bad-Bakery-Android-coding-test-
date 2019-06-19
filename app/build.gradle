@@ -36,6 +36,7 @@ dependencies {
 
     //Testing libs
     implementation 'com.natpryce:hamkrest:1.7.0.0'
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
 
     //support libraries
     implementation 'com.android.support:recyclerview-v7:28.0.0'

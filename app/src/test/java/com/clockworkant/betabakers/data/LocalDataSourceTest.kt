@@ -1,5 +1,9 @@
 package com.clockworkant.betabakers.data
 
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.plugins.RxJavaPlugins
+import io.reactivex.schedulers.Schedulers
+import org.junit.Before
 import org.junit.Test
 import java.io.BufferedInputStream
 import java.io.FileInputStream
@@ -7,6 +11,13 @@ import java.io.FileInputStream
 class LocalDataSourceTest {
     val cakesPath = this.javaClass.getResource("/cakes.json").path
     val localDataSource = LocalDataSource(BufferedInputStream(FileInputStream(cakesPath)))
+
+    @Before
+    fun setUp() {
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
+        RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
+        RxJavaPlugins.setComputationSchedulerHandler { Schedulers.trampoline() }
+    }
 
     @Test
     fun `assert number of cakes`() {
