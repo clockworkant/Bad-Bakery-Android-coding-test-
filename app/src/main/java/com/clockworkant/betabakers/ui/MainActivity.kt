@@ -1,27 +1,24 @@
 package com.clockworkant.betabakers.ui
 
-import android.content.DialogInterface
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.clockworkant.betabakers.R
 import com.clockworkant.betabakers.data.Cake
 import kotlinx.android.synthetic.main.activity_cake_list.*
 import kotlinx.android.synthetic.main.cake_item.view.*
 import org.koin.android.ext.android.get
-import android.support.v7.widget.DividerItemDecoration
 
+const val KEY_PERSISTED_CAKES = "persisted.cakes"
 
 class MainActivity : AppCompatActivity(), CakeListView {
-
     private val cakeAdapter: CakeAdapter =
         CakeAdapter(callback = this::onCakeClicked)
 
@@ -48,12 +45,27 @@ class MainActivity : AppCompatActivity(), CakeListView {
         cakes_list_refreshlayout.setOnRefreshListener { cakeListPresenter.onRefresh() }
 
         cakeListPresenter = CakeListPresenter(this, get())
-        cakeListPresenter.onAppLoaded()
+
+        val hasPersistedCakes = savedInstanceState?.containsKey(KEY_PERSISTED_CAKES) ?: false
+        if(!hasPersistedCakes){
+            cakeListPresenter.onAppLoaded()
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         cakeListPresenter.onTerminated()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putParcelableArray(KEY_PERSISTED_CAKES, cakeAdapter.getCakes().toTypedArray())
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        val cakes = savedInstanceState.getParcelableArray(KEY_PERSISTED_CAKES) as Array<Cake>
+        cakeAdapter.setCakes(cakes.toList())
+        super.onRestoreInstanceState(savedInstanceState)
     }
 
     private fun onCakeClicked(cake: Cake) {
@@ -105,6 +117,8 @@ private class CakeAdapter(
         cakes.addAll(newCakes)
         notifyDataSetChanged()
     }
+
+    fun getCakes(): List<Cake> = cakes
 
 }
 
