@@ -1,3 +1,15 @@
+# Overview
+This is a test project to show a way of building an andriod app. 
+
+## Project features
+- model view presenter architecture (without library or abstract classes)
+- local and remote datasource (local for running offline using an assets file)
+- Koin for basic Inversion of control/Dependency injection
+- retrofit with rxjava for networking
+- mockito (kotlin) for unit testing
+- Gson for json parsing
+- Glide for image loading
+
 # Must Haves
 - on app started
     - fetch cakes from rest end point

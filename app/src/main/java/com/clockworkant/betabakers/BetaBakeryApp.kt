@@ -1,7 +1,7 @@
 package com.clockworkant.betabakers
 
 import android.app.Application
-import com.clockworkant.betabakers.DI.repoModule
+import com.clockworkant.betabakers.di.repoModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 

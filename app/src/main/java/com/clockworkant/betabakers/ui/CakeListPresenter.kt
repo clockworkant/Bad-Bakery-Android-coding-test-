@@ -26,6 +26,7 @@ class CakeListPresenter(
                     )
                 }, {
                     cakeListView.showLoading(false)
+                    //TODO future - parse error and show different errors if it's helpful to the user
                     cakeListView.showError(it)
                 })
         )

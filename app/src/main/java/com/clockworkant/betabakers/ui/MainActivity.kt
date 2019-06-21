@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity(), CakeListView {
         AlertDialog.Builder(this)
             .setTitle("Error")
             .setMessage("We're sorry but an error has occured, would you like to try and retrieve the cakes again?")
-            .setPositiveButton("Refresh") { dialog, which -> cakeListPresenter.onRefresh()}
+            .setPositiveButton("Refresh") { _, _ -> cakeListPresenter.onRefresh()}
             .setNeutralButton("Back", null)
             .create()
             .show()

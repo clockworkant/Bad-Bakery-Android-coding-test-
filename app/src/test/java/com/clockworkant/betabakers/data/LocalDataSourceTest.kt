@@ -28,6 +28,9 @@ class LocalDataSourceTest {
             .assertValue { it.size == 20 }
     }
 
+    /**
+     * A really quick way to check the json deserialisation worked without spinning up an android vm
+     */
     @Test
     fun `assert cake deseralised`() {
         val expectedCake = Cake(

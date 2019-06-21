@@ -1,17 +1,15 @@
 package com.clockworkant.betabakers.data
 
 import com.google.gson.Gson
-import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
-import java.io.InputStream
-import java.io.InputStreamReader
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import java.io.InputStream
+import java.io.InputStreamReader
 import java.util.concurrent.TimeUnit
 
 
@@ -24,13 +22,13 @@ class LocalDataSource(cakeInputStream: InputStream) : DataSource {
         Gson().fromJson(InputStreamReader(cakeInputStream), Array<Cake>::class.java).toList()
 
     override fun getCakes() = Single.just(cakes)
-        .delay(2, TimeUnit.SECONDS)
+        .delay(2, TimeUnit.SECONDS) //The delay is to emulate a web call (for progress spinners etc)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
 
 }
 
-class RemoteDataSource() : DataSource {
+class RemoteDataSource : DataSource {
     private val service: CakeService
 
     init {
