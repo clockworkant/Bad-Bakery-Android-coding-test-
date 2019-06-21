@@ -57,14 +57,16 @@ class MainActivity : AppCompatActivity(), CakeListView {
         cakeListPresenter.onTerminated()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelableArray(KEY_PERSISTED_CAKES, cakeAdapter.getCakes().toTypedArray())
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putParcelableArray(KEY_PERSISTED_CAKES, cakeAdapter.getCakes().toTypedArray())
         super.onSaveInstanceState(outState)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        val cakes = savedInstanceState.getParcelableArray(KEY_PERSISTED_CAKES) as Array<Cake>
-        cakeAdapter.setCakes(cakes.toList())
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            val cakes = it.getParcelableArray(KEY_PERSISTED_CAKES) as Array<Cake>
+            cakeAdapter.setCakes(cakes.toList())
+        }
         super.onRestoreInstanceState(savedInstanceState)
     }
 
