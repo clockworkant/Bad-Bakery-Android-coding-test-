@@ -1,7 +1,7 @@
 # Overview
 This is a test project to show a way of building an andriod app. 
 
-## Project features
+### Project features
 - model view presenter architecture (without library or abstract classes)
 - local and remote datasource (local for running offline using an assets file)
 - Koin for basic Inversion of control/Dependency injection
@@ -10,7 +10,8 @@ This is a test project to show a way of building an andriod app.
 - Gson for json parsing
 - Glide for image loading
 
-# Must Haves
+# Distilled requirements
+### Must Haves
 - on app started
     - fetch cakes from rest end point
         - https://gist.githubusercontent.com/t-reed/739df99e9d96700f17604a3971e701fa/raw/1d4dd9c5a0ec758ff5ae92b7b13fe4d57d34e1dc/waracle_cake-android-client
@@ -24,16 +25,17 @@ This is a test project to show a way of building an andriod app.
 - Pull to refresh
 - Handle list loading error (no network etc)
 
-# Tests
+### Tests
 - When app is started and load succeeds, cakes are presented with duplicates removed and sorting applied
 - When app is started and load fails, error is presented
 
-# Extras
+### Extras
 - Handle orientation changes without list reload
 - Retry option on error
 - Animate list items 
 
-# Considerations
+### Considerations
 - Material design
 
-
+# Video
+![](output.gif)
